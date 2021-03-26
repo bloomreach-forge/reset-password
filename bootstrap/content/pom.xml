@@ -8,7 +8,7 @@
     <version>5.0</version>
   </parent>
 
-  <name>BloomReach Reset Password Bootstrap Content</name>
+  <name>Bloomreach Reset Password Bootstrap Content</name>
   <description>Reset Password Bootstrap Content</description>
   <artifactId>resetpassword-bootstrap-content</artifactId>
 

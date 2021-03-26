@@ -7,7 +7,7 @@
     <version>5.0</version>
   </parent>
 
-  <name>BloomReach Reset Password CMS</name>
+  <name>Bloomreach Reset Password CMS</name>
   <description>Reset Password CMS</description>
   <artifactId>resetpassword-cms</artifactId>
 
@@ -54,6 +54,8 @@
     <dependency>
       <groupId>com.fasterxml.jackson.jaxrs</groupId>
       <artifactId>jackson-jaxrs-json-provider</artifactId>
+      <version>${jackson-jaxrs-json-provider.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.jackrabbit</groupId>
