@@ -8,7 +8,7 @@
     <version>5.1-SNAPSHOT</version>
   </parent>
 
-  <name>BloomReach Reset Password Bootstrap</name>
+  <name>Bloomreach Reset Password Bootstrap</name>
   <description>Reset Password Bootstrap</description>
   <artifactId>resetpassword-bootstrap</artifactId>
   <packaging>pom</packaging>

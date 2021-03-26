@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE document PUBLIC
-        "-//Apache Software Foundation//DTD XDOC 1.0//EN"
-        "http://maven.apache.org/dtd/xdoc_1_0.dtd">
 <!--
-    Copyright 2016-2020 Bloomreach Inc. (https://www.bloomreach.com)
+    Copyright 2016-2021 Bloomreach Inc. (https://www.bloomreach.com)
 
     Licensed under the Apache License, Version 2.0 (the  "License");
     you may not use this file except in compliance with the License.
@@ -28,7 +25,8 @@
             </p>
         </section>
         <section name="Code base on GitHub">
-            <p>The code of this project is on GitHub at <a href="https://github.com/onehippo-forge/reset-password/">https://github.com/onehippo-forge/reset-password/</a>.</p>
+            <p>The code of this project is on GitHub at
+              <a href="https://github.com/bloomreach-forge/reset-password/">https://github.com/bloomreach-forge/reset-password/</a>.</p>
         </section>
         <section name="Installation">
             <subsection name="Add the Forge repository configuration">
@@ -56,16 +54,17 @@
      </dependency>
         ]]></source>
                 </div>
-                <div>Now build and run the project; from Essentials choose the Reset Password feature.</div>
+                <div>Check the <a href="release-notes.html">Release Notes</a> for your applicable version.
+                  Then build and run the project and from Essentials choose the Reset Password feature.</div>
             </subsection>
 
             <subsection name="Method 2: manual installation">
                 <h4>Add version property to the project pom</h4>
                 <p>In the main <code>pom.xml</code> of the project, in the properties section, add this property.
-                    For the correct version number, check the <a href="release-notes.html">Release Notes</a> page.</p>
+                    For the correct version number, check the <a href="release-notes.html">Release Notes</a>.</p>
                 <div class="brush: xml">
                     <source><![CDATA[
-    <forge.resetpassword.version>version.number</forge.resetpassword.version>
+    <bloomreach.forge.resetpassword.version>version.number</bloomreach.forge.resetpassword.version>
         ]]></source>
                 </div>
                 <h4>Add dependencies to the CMS</h4>
@@ -75,7 +74,7 @@
           <dependency>
             <groupId>org.bloomreach.forge.resetpassword</groupId>
             <artifactId>resetpassword-cms</artifactId>
-            <version>${forge.resetpassword.version}</version>
+            <version>${bloomreach.forge.resetpassword.version}</version>
           </dependency>
           ]]></source>
                     This adds the main dependency.
@@ -85,7 +84,7 @@
           <dependency>
             <groupId>org.bloomreach.forge.resetpassword</groupId>
             <artifactId>resetpassword-bootstrap-configuration</artifactId>
-            <version>${forge.resetpassword.version}</version>
+            <version>${bloomreach.forge.resetpassword.version}</version>
           </dependency>
           ]]></source>
                     Registers e-mail module, extended login page and the resetpassword functionality.
@@ -95,7 +94,7 @@
           <dependency>
             <groupId>org.bloomreach.forge.resetpassword</groupId>
             <artifactId>resetpassword-bootstrap-content</artifactId>
-            <version>${forge.resetpassword.version}</version>
+            <version>${bloomreach.forge.resetpassword.version}</version>
           </dependency>
           ]]></source>
                     Adds a content document to the repository at /content/documents/resetpassword/password-reset
