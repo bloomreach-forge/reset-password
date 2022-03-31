@@ -42,12 +42,16 @@
           <artifactId>javax.mail</artifactId>
         </exclusion>
         <exclusion>
-          <artifactId>mail</artifactId>
           <groupId>javax.mail</groupId>
+          <artifactId>mail</artifactId>
         </exclusion>
         <exclusion>
-          <artifactId>activation</artifactId>
           <groupId>javax.activation</groupId>
+          <artifactId>activation</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.jaxrs</groupId>
+          <artifactId>jackson-jaxrs-json-provider</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
