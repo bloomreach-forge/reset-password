@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-    Copyright 2016-2020 Bloomreach, Inc.
+    Copyright 2016-2022 Bloomreach, Inc.
 
     Licensed to the Apache Software Foundation (ASF) under one or more
     contributor license agreements.  See the NOTICE file distributed with
@@ -52,6 +52,19 @@
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="5.1">
+        <p class="smallinfo">Release Date: 21 April 2022</p>
+        <ul>
+          <li><a href="https://issues.onehippo.com/browse/HIPFORGE-420">HIPFORGE-420</a><br/>
+            Make the plugin work better on Experience Manager 14.7. <br/>
+            Note: use <strong>14.7.6</strong> or higher to avoid a NullPointerException in the Reset Password screen.
+            <ul>
+              <li>Improve dependency management: minimize dependency configurations, also commons-email was pulling in jackson-jaxrs-json of lower version.</li>
+              <li>Improve the reset password screen: bump copyright year, fork login_enterprise.css avoiding a back-end ERROR logging</li>
+            </ul>
+          </li>
+        </ul>
+      </subsection>
       <subsection name="5.0">
         <p class="smallinfo">Release Date: 10 September 2020</p>
         <ul>
