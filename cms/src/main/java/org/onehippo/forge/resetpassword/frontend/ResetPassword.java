@@ -1,5 +1,5 @@
 /*
- *  Copyright 2008-2020 Bloomreach Inc. (https://www.bloomreach.com)
+ *  Copyright 2008-2022 Bloomreach Inc. (https://www.bloomreach.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import org.hippoecm.frontend.session.PluginUserSession;
 import org.hippoecm.frontend.usagestatistics.UsageStatisticsSettings;
 import org.hippoecm.frontend.util.WebApplicationHelper;
 
+import org.hippoecm.frontend.widgets.Pinger;
 import org.onehippo.cms7.services.HippoServiceRegistry;
 
 import org.slf4j.Logger;
@@ -89,13 +90,17 @@ public class ResetPassword extends RenderPlugin {
         add(ClassAttribute.append("login-plugin"));
 
         add(new Label("pageTitle", getString("page.title")));
+
         final WicketFaviconService wicketFaviconService = HippoServiceRegistry.getService(WicketFaviconService.class);
         final ResourceReference iconReference = wicketFaviconService.getFaviconResourceReference();
         add(new ResourceLink("faviconLink", iconReference));
 
+        // In case of using a different edition, add extra CSS rules to show the required styling
         if (config.containsKey(EDITION)) {
             final String edition = config.getString(EDITION);
-            editionCss = new CssResourceReference(LoginPlugin.class, "login_" + edition + ".css");
+            if ("enterprise".equals(edition)) {
+                editionCss = new CssResourceReference(ResetPassword.class, "login_enterprise.css");
+            }
         }
 
         final IRequestParameters requestParameters = getRequest().getQueryParameters();
@@ -116,7 +121,6 @@ public class ResetPassword extends RenderPlugin {
         add(setPasswordForm);
 
         final ExternalLink termsAndConditions = new ExternalLink("termsAndConditions", TERMS_AND_CONDITIONS_LINK) {
-
             @Override
             public boolean isVisible() {
                 return UsageStatisticsSettings.get().isEnabled();
@@ -124,6 +128,11 @@ public class ResetPassword extends RenderPlugin {
         };
         termsAndConditions.setOutputMarkupId(true);
         add(termsAndConditions);
+
+        // Add a dummy pinger so a lingering pinger in an open CMS tab that sends an Ajax request to a freshly started
+        // CMS instance will still find a pinger component on the current Wicket page (i.e. the login page). That
+        // request will then make Wicket Ajax redirect to the login page.
+        add(Pinger.dummy());
     }
 
     protected Panel createResetPasswordPanel(final PanelInfo panelInfo) {
@@ -134,10 +143,6 @@ public class ResetPassword extends RenderPlugin {
         return new SetPasswordPanel(panelInfo, code, resetPasswordForm);
     }
 
-    /**
-     * Checks if enterprise css should be added.
-     * @param response response
-     */
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
