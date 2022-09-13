@@ -23,7 +23,7 @@ import javax.jcr.Session;
 
 import javax.servlet.http.Cookie;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;

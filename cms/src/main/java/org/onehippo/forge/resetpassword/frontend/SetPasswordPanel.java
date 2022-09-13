@@ -1,5 +1,5 @@
 /*
- *  Copyright 2008-2020 Bloomreach Inc. (https://www.bloomreach.com)
+ *  Copyright 2008-2022 Bloomreach Inc. (https://www.bloomreach.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -105,7 +105,7 @@ public class SetPasswordPanel extends Panel {
                 "});"));
     }
 
-    protected class SetPasswordForm extends Form {
+    protected class SetPasswordForm extends Form<Void> {
 
         private final String code;
         private final String uid;

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2008-2020 Bloomreach Inc. (https://www.bloomreach.com)
+ *  Copyright 2008-2022 Bloomreach Inc. (https://www.bloomreach.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.mail.EmailException;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -93,7 +93,7 @@ public class ResetPasswordPanel extends Panel {
     /**
      * Inner class for form on panel
      */
-    protected class ResetPasswordForm extends Form {
+    protected class ResetPasswordForm extends Form<Void> {
 
         private final RequiredTextField<String> usernameTextField;
         private final IModel<String> usernamePlaceholder;

@@ -5,14 +5,14 @@
   <parent>
     <groupId>org.onehippo.cms7</groupId>
     <artifactId>hippo-cms7-release</artifactId>
-    <version>14.7.6</version>
+    <version>15.0.0</version>
   </parent>
 
   <name>Bloomreach Reset Password</name>
   <description>Hippo Reset Password</description>
   <groupId>org.bloomreach.forge.resetpassword</groupId>
   <artifactId>resetpassword</artifactId>
-  <version>5.2-SNAPSHOT</version>
+  <version>6.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <url>https://github.com/bloomreach-forge/reset-password</url>
   <inceptionYear>2016</inceptionYear>
@@ -23,7 +23,7 @@
   </organization>
 
   <properties>
-    <essentials.version>14.7.6</essentials.version>
+    <essentials.version>15.0.0</essentials.version>
 
     <commons-email.version>1.5</commons-email.version>
 
@@ -63,11 +63,6 @@
     <system>Jira</system>
     <url>https://issues.onehippo.com/browse/HIPFORGE</url>
   </issueManagement>
-
-  <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/bloomreach-forge/reset-password</url>
-  </ciManagement>
 
   <licenses>
     <license>
