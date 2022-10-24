@@ -3,7 +3,7 @@
   "name" : "Reset Password",
   "introduction" : "Basic Reset Password functionality",
   "vendor" : {
-    "name" : "BloomReach Forge",
+    "name" : "Bloomreach Forge",
     "url" : "https://github.com/bloomreach-forge"
   },
   "hasConfiguration" : false,
