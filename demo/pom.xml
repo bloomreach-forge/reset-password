@@ -64,7 +64,7 @@
     <!-- ***END temporary override of versions*** -->
     <forge.resetpassword.version>${project.version}</forge.resetpassword.version>
 
-    <essentials.version>14.7.6</essentials.version>
+    <essentials.version>15.0.0</essentials.version>
     <jsp-api.version>2.2</jsp-api.version>
     <taglibs.version>1.2.5</taglibs.version>
 
