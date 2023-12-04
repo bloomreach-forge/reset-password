@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.onehippo.cms7</groupId>
     <artifactId>hippo-cms7-release</artifactId>
-    <version>15.0.0</version>
+    <version>15.4.0</version>
   </parent>
 
   <name>Bloomreach Reset Password</name>
@@ -23,7 +23,7 @@
   </organization>
 
   <properties>
-    <essentials.version>15.0.0</essentials.version>
+    <essentials.version>15.4.0</essentials.version>
 
     <commons-email.version>1.5</commons-email.version>
 
@@ -54,7 +54,7 @@
     <repository>
       <name>Hippo Maven 2 Forge Repository</name>
       <id>hippo-maven2-forge</id>
-      <url>https://maven.onehippo.com/content/repositories/forge-releases/</url>
+      <url>https://maven.bloomreach.com/content/repositories/forge-releases/</url>
       <uniqueVersion>false</uniqueVersion>
     </repository>
   </distributionManagement>
@@ -110,18 +110,18 @@
     <repository>
       <id>hippo</id>
       <name>Hippo maven 2 repository.</name>
-      <url>http://maven.onehippo.com/maven2/</url>
+      <url>http://maven.bloomreach.com/maven2/</url>
     </repository>
     <repository>
       <id>hippo-maven2-forge</id>
       <name>Hippo Maven 2 Forge repository</name>
-      <url>http://maven.onehippo.com/maven2-forge/</url>
+      <url>http://maven.bloomreach.com/maven2-forge/</url>
       <snapshots/>
     </repository>
     <repository>
       <id>hippo-maven2-enterprise</id>
       <name>Hippo Maven 2 enterprise repository</name>
-      <url>http://maven.onehippo.com/maven2-enterprise/</url>
+      <url>http://maven.bloomreach.com/maven2-enterprise/</url>
       <snapshots/>
     </repository>
   </repositories>

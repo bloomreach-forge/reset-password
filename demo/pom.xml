@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.onehippo.cms7</groupId>
     <artifactId>hippo-cms7-release</artifactId>
-    <version>15.0.0</version>
+    <version>15.4.0</version>
   </parent>
 
   <name>My Project</name>
@@ -64,7 +64,7 @@
     <!-- ***END temporary override of versions*** -->
     <forge.resetpassword.version>${project.version}</forge.resetpassword.version>
 
-    <essentials.version>15.0.0</essentials.version>
+    <essentials.version>15.4.0</essentials.version>
     <jsp-api.version>2.2</jsp-api.version>
     <taglibs.version>1.2.5</taglibs.version>
 
@@ -78,12 +78,12 @@
     <repository>
       <id>hippo</id>
       <name>Hippo maven 2 repository.</name>
-      <url>https://maven.onehippo.com/maven2/</url>
+      <url>https://maven.bloomreach.com/maven2/</url>
     </repository>
     <repository>
       <id>hippo-forge</id>
       <name>Bloomreach Forge Maven 2 repository.</name>
-      <url>https://maven.onehippo.com/maven2-forge/</url>
+      <url>https://maven.bloomreach.com/maven2-forge/</url>
     </repository>
   </repositories>
 
