@@ -48,7 +48,7 @@
 
   <issueManagement>
     <system>Jira</system>
-    <url>https://issues.onehippo.com/browse/HIPFORGE</url>
+    <url>https://issues.onehippo.com/browse/FORGE</url>
   </issueManagement>
 
   <licenses>
@@ -61,31 +61,10 @@
 
   <developers>
     <developer>
-      <name>Michael Metternich</name>
-      <id>mjmetter</id>
-      <email>michael.metternich @ bloomreach . com</email>
-      <organization>Bloomreach</organization>
-      <roles>
-        <role>Project Lead</role>
-        <role>Java Developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
       <name>Jeroen Hoffman</name>
       <id>jhoffman</id>
       <email>jeroen.hoffman @ bloomreach . com</email>
       <organization>Bloomreach</organization>
-      <roles>
-        <role>Java Developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <name>Joost Oudeman</name>
-      <id>joostoudeman</id>
-      <email>joost @ openweb . nl</email>
-      <organization>Open Web IT</organization>
       <roles>
         <role>Java Developer</role>
       </roles>
