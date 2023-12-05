@@ -50,7 +50,7 @@
      <dependency>
         <groupId>org.bloomreach.forge.resetpassword</groupId>
         <artifactId>reset-password-essentials</artifactId>
-        <version>5.1</version>
+        <version>6.0.0</version>
      </dependency>
         ]]></source>
                 </div>
