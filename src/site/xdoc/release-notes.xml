@@ -30,6 +30,10 @@
           <th>Bloomreach Experience Manager Release version</th>
         </tr>
         <tr>
+          <td>6.x</td>
+          <td>15.x</td>
+        </tr>
+        <tr>
           <td>5.x</td>
           <td>14.x</td>
         </tr>
@@ -52,6 +56,14 @@
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="6.0">
+        <p class="smallinfo">Release Date: XX December 2023</p>
+        <ul>
+          <li><a href="https://issues.onehippo.com/browse/FORGE-429">FORGE-429</a><br/>
+            Upgrade to Bloomreach Experience Manager 15.
+          </li>
+        </ul>
+      </subsection>
       <subsection name="5.1">
         <p class="smallinfo">Release Date: 21 April 2022</p>
         <ul>
