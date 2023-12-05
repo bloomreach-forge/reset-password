@@ -1,6 +1,6 @@
 package org.onehippo.forge.resetpassword.frontend;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -23,7 +23,7 @@ public class AjaxAttributeModifier extends AttributeModifier {
     }
 
     void update(final AjaxRequestTarget target) {
-        final String value = StringEscapeUtils.escapeJavaScript((String) getReplaceModel().getObject());
+        final String value = StringEscapeUtils.escapeEcmaScript((String) getReplaceModel().getObject());
         target.appendJavaScript(String.format("$('#%s').attr('%s', '%s');", markupId, getAttribute(), value));
     }
 }

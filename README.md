@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/bloomreach-forge/reset-password.svg?branch=develop)](https://travis-ci.org/bloomreach-forge/reset-password)
-
 # Reset Password Plugin
 
 The Reset Password plugin provides basic reset password functionality. 
@@ -51,7 +49,17 @@ Download  FakeSMTP from:
 
 and run it as:
 
-
 ```bash
 java -jar fakeSMTP-2.0.jar -s  -p 2525 -a 127.0.0.1
 ```
+-> Go to CMS login page.
+
+-> Click on Forgot password, it will take you to the Reset Password page.
+
+-> Enter the username and click on Reset.
+
+-> An email will be sent to the Fake SMTP Server with a link to reset the password.
+
+-> Click on the link, it will take you to the Reset Password page, enter the new password and click on Reset.
+
+-> Go to the CMS Login page and test the new password.
