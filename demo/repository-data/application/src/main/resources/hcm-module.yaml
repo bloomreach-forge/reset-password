@@ -1,6 +1,5 @@
 group:
   name: myproject
-#  after: hippo-cms
   after: [hippo-cms, bloomreach-forge]
 project: myproject
 module:

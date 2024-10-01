@@ -1,0 +1,5 @@
+definitions:
+  config:
+    /hippo:configuration/hippo:users/admin:
+      hipposys:email: qwe@ere.com
+      jcr:mixinTypes: ['hippostd:relaxed']
