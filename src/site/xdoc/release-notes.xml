@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-    Copyright 2016-2023 Bloomreach, Inc.
+    Copyright 2024 Bloomreach, Inc.
 
     Licensed to the Apache Software Foundation (ASF) under one or more
     contributor license agreements.  See the NOTICE file distributed with
@@ -30,7 +30,11 @@
           <th>Bloomreach Experience Manager Release version</th>
         </tr>
         <tr>
-          <td>6.x.x</td>
+          <td>7.x</td>
+          <td>16.x</td>
+        </tr>
+        <tr>
+          <td>6.x</td>
           <td>15.x</td>
         </tr>
         <tr>
@@ -56,6 +60,14 @@
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="7.0.0">
+        <p class="smallinfo">Release Date: XX October 2024</p>
+        <ul>
+          <li><a href="https://issues.onehippo.com/browse/FORGE-531">FORGE-531</a><br/>
+            Upgrade to Bloomreach Experience Manager 16.
+          </li>
+        </ul>
+      </subsection>
       <subsection name="6.0.0">
         <p class="smallinfo">Release Date: 05 December 2023</p>
         <ul>

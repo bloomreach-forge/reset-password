@@ -28,7 +28,7 @@ and therefore ignored by Git.
      <dependency>
         <groupId>org.bloomreach.forge.resetpassword</groupId>
         <artifactId>reset-password-essentials</artifactId>
-        <version>5.0</version>       
+        <version>7.0.0</version>       
      </dependency>
 ```
  

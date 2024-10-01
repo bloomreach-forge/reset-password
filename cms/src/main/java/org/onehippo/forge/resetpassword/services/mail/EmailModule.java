@@ -1,5 +1,5 @@
 /*
- *  Copyright 2008-2023 Bloomreach Inc. (https://www.bloomreach.com)
+ *  Copyright 2024 Bloomreach Inc. (https://www.bloomreach.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -48,11 +48,11 @@ public class EmailModule extends AbstractReconfigurableDaemonModule {
         log.info("Initialized mail module");
         mailService = new MailServiceImpl();
         mailService.setMailSessionName(mailSessionName);
-        HippoServiceRegistry.registerService(mailService, MailService.class);
+        HippoServiceRegistry.register(mailService, MailService.class);
     }
 
     @Override
     protected void doShutdown() {
-        HippoServiceRegistry.unregisterService(mailService, MailService.class);
+        HippoServiceRegistry.unregister(mailService, MailService.class);
     }
 }
