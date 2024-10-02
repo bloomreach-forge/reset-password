@@ -1,5 +1,5 @@
 /*
- *  Copyright 2008-2023 Bloomreach Inc. (https://www.bloomreach.com)
+ *  Copyright 2024 Bloomreach Inc. (https://www.bloomreach.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package org.onehippo.forge.resetpassword.services.mail;
 
-import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail2.core.EmailException;
 
 public interface MailService {
     

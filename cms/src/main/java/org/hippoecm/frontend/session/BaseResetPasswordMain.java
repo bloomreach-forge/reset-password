@@ -1,5 +1,5 @@
 /*
- *  Copyright 2023 Bloomreach Inc. (https://www.bloomreach.com)
+ *  Copyright 2024 Bloomreach Inc. (https://www.bloomreach.com)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,11 +17,9 @@ package org.hippoecm.frontend.session;
 
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-
 import org.hippoecm.frontend.Main;
 import org.hippoecm.frontend.model.JcrSessionModel;
 import org.hippoecm.frontend.model.UserCredentials;
-
 import org.onehippo.repository.security.JvmCredentials;
 
 /**

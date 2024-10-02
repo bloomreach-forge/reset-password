@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.onehippo.cms7</groupId>
     <artifactId>hippo-cms7-release</artifactId>
-    <version>15.4.0</version>
+    <version>16.0.0</version>
   </parent>
 
   <name>Bloomreach Reset Password</name>
@@ -23,11 +23,8 @@
   </organization>
 
   <properties>
-    <essentials.version>15.4.0</essentials.version>
-
-    <commons-email.version>1.5</commons-email.version>
-
-    <plugin.project-info-reports.version>3.1.1</plugin.project-info-reports.version>
+    <essentials.version>${hippo.release.version}</essentials.version>
+    <commons-email2.version>2.0.0-M1</commons-email2.version>
   </properties>
 
   <scm>
@@ -39,8 +36,8 @@
 
   <distributionManagement>
     <repository>
-      <name>Hippo Maven 2 Forge Repository</name>
-      <id>hippo-maven2-forge</id>
+      <name>Bloomreach Maven 2 Forge Repository</name>
+      <id>bloomreach-maven2-forge</id>
       <url>https://maven.bloomreach.com/content/repositories/forge-releases/</url>
       <uniqueVersion>false</uniqueVersion>
     </repository>
@@ -74,20 +71,20 @@
 
   <repositories>
     <repository>
-      <id>hippo</id>
-      <name>Hippo maven 2 repository.</name>
-      <url>https://maven.bloomreach.com/maven2/</url>
+      <id>bloomreach-maven2</id>
+      <name>Bloomreach maven 2 repository.</name>
+      <url>https://maven.bloomreach.com/repository/maven2/</url>
     </repository>
     <repository>
-      <id>hippo-maven2-forge</id>
-      <name>Hippo Maven 2 Forge repository</name>
-      <url>https://maven.bloomreach.com/maven2-forge/</url>
+      <id>bloomreach-maven2-forge</id>
+      <name>Bloomreach Maven 2 Forge repository</name>
+      <url>https://maven.bloomreach.com/repository/maven2-forge/</url>
       <snapshots/>
     </repository>
     <repository>
-      <id>hippo-maven2-enterprise</id>
-      <name>Hippo Maven 2 enterprise repository</name>
-      <url>https://maven.bloomreach.com/maven2-enterprise/</url>
+      <id>bloomreach-maven2-enterprise</id>
+      <name>Bloomreach Maven 2 enterprise repository</name>
+      <url>https://maven.bloomreach.com/repository/maven2-enterprise/</url>
       <snapshots/>
     </repository>
   </repositories>
@@ -106,20 +103,6 @@
         <version>${essentials.version}</version>
         <scope>provided</scope>
       </dependency>
-
-      <!-- workaround to make maven-project-info-reports-plugin work -->
-      <dependency>
-        <groupId>com.fasterxml.jackson.module</groupId>
-        <artifactId>jackson-module-jaxb-annotations</artifactId>
-        <version>2.12.0</version>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-core</artifactId>
-        <version>3.4.10</version>
-        <scope>provided</scope>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -128,7 +111,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>${plugin.project-info-reports.version}</version>
+        <version>${maven.plugin.project-info.version}</version>
       </plugin>
     </plugins>
   </reporting>
@@ -152,7 +135,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven.plugin.compiler.version}</version>
         <configuration>
-          <release>11</release>
+          <release>17</release>
         </configuration>
       </plugin>
       <plugin>
@@ -192,7 +175,6 @@
         <executions>
           <execution>
             <id>attach-sources</id>
-            <phase>verify</phase>
             <goals>
               <goal>jar-no-fork</goal>
             </goals>

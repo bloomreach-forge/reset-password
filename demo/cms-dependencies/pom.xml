@@ -13,26 +13,6 @@
   <description>My Project CMS Dependencies</description>
   <dependencies>
 
-  <!--    Reset password-->
-    <dependency>
-      <groupId>org.bloomreach.forge.resetpassword</groupId>
-      <artifactId>resetpassword-cms</artifactId>
-      <version>${forge.resetpassword.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.bloomreach.forge.resetpassword</groupId>
-      <artifactId>resetpassword-bootstrap-configuration</artifactId>
-      <version>${forge.resetpassword.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.bloomreach.forge.resetpassword</groupId>
-      <artifactId>resetpassword-bootstrap-content</artifactId>
-      <version>${forge.resetpassword.version}</version>
-    </dependency>
-    <!--    Reset password-->
-
     <dependency>
       <groupId>org.example</groupId>
       <artifactId>myproject-repository-data-application</artifactId>
