@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.example</groupId>
     <artifactId>myproject</artifactId>
-    <version>6.0.0</version>
+    <version>7.0.0</version>
   </parent>
   <artifactId>myproject-cms</artifactId>
   <packaging>war</packaging>
@@ -17,6 +16,21 @@
       <artifactId>myproject-cms-dependencies</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.bloomreach.forge.resetpassword</groupId>
+      <artifactId>resetpassword-cms</artifactId>
+      <version>${bloomreach.forge.reset-password.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bloomreach.forge.resetpassword</groupId>
+      <artifactId>resetpassword-bootstrap-configuration</artifactId>
+      <version>${bloomreach.forge.reset-password.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bloomreach.forge.resetpassword</groupId>
+      <artifactId>resetpassword-bootstrap-content</artifactId>
+      <version>${bloomreach.forge.reset-password.version}</version>
     </dependency>
   </dependencies>
   <build>
@@ -36,7 +50,7 @@
       </plugin>
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
-        <artifactId>cargo-maven2-plugin</artifactId>
+        <artifactId>cargo-maven3-plugin</artifactId>
         <configuration>
           <configuration>
             <type>runtime</type>

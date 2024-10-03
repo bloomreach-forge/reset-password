@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2016-2023 Bloomreach Inc. (https://www.bloomreach.com)
+    Copyright 2024 Bloomreach Inc. (https://www.bloomreach.com)
 
     Licensed under the Apache License, Version 2.0 (the  "License");
     you may not use this file except in compliance with the License.
@@ -34,9 +34,9 @@
                 <div class="brush: xml">
                     <source><![CDATA[
     <repository>
-      <id>hippo-forge</id>
+      <id>bloomreach-forge</id>
       <name>Bloomreach Forge Maven 2 repository.</name>
-      <url>https://maven.onehippo.com/maven2-forge/</url>
+      <url>https://maven.bloomreach.com/repository/maven2-forge/</url>
     </repository>
         ]]></source>
                 </div>
@@ -50,7 +50,7 @@
      <dependency>
         <groupId>org.bloomreach.forge.resetpassword</groupId>
         <artifactId>reset-password-essentials</artifactId>
-        <version>6.0.0</version>
+        <version>7.0.0</version>
      </dependency>
         ]]></source>
                 </div>

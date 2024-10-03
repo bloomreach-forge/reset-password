@@ -28,7 +28,7 @@ and therefore ignored by Git.
      <dependency>
         <groupId>org.bloomreach.forge.resetpassword</groupId>
         <artifactId>reset-password-essentials</artifactId>
-        <version>5.0</version>       
+        <version>7.0.0</version>       
      </dependency>
 ```
  
@@ -43,6 +43,7 @@ add mail session JNDI resource to local context.xml, e.g.:
       />
 ```
 
+___
 Download  FakeSMTP from:
 
 [https://github.com/Nilhcem/FakeSMTP](https://github.com/Nilhcem/FakeSMTP)
@@ -50,8 +51,16 @@ Download  FakeSMTP from:
 and run it as:
 
 ```bash
-java -jar fakeSMTP-2.0.jar -s  -p 2525 -a 127.0.0.1
+java -jar fakeSMTP-2.1-SNAPSHOT.jar -s  -p 2525 -a 127.0.0.1
 ```
+If you encounter issues on Mac, you can try to run it as:
+
+```bash
+java --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED -jar fakeSMTP-2.1-SNAPSHOT.jar -s -p 2525 -a 127.0.0.1
+```
+
+You may also need to update FakeSMTP to use Java 7 instead of Java 6.
+___
 -> Go to CMS login page.
 
 -> Click on Forgot password, it will take you to the Reset Password page.
