@@ -15,7 +15,7 @@
     <dependency>
       <groupId>org.bloomreach.forge.resetpassword</groupId>
       <artifactId>reset-password-essentials</artifactId>
-      <version>6.0.1-SNAPSHOT</version>
+      <version>${bloomreach.forge.reset-password.version}</version>
     </dependency>
     <dependency>
       <groupId>org.onehippo.cms7</groupId>

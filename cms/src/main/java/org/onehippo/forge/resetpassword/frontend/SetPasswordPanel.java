@@ -15,6 +15,7 @@
  */
 package org.onehippo.forge.resetpassword.frontend;
 
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +65,6 @@ import static org.onehippo.forge.resetpassword.frontend.ResetPasswordConst.PASSW
 /**
  * SetPasswordPanel
  * Panel on ResetPasswordFrame, showing two fields for entering the new password twice
- * <p>
- * Based on @Link{SimpleLoginPlugin} en @Link{LoginPlugin}.
  */
 public class SetPasswordPanel extends Panel {
 
@@ -94,7 +93,6 @@ public class SetPasswordPanel extends Panel {
         String passwordValidationLocation = panelInfo.getConfig().get(PASSWORDVALIDATION_LOCATION).toString();
         JcrPluginConfig pluginConfig = new JcrPluginConfig(new JcrNodeModel(passwordValidationLocation));
         passwordValidationService = new PasswordValidationServiceImpl(panelInfo.getContext(), pluginConfig);
-
     }
 
     @Override
@@ -103,6 +101,50 @@ public class SetPasswordPanel extends Panel {
         response.render(OnDomReadyHeaderItem.forScript("$('#password-verification').bind(\"cut copy paste\",function(e) {" +
                 "  e.preventDefault();" +
                 "});"));
+    }
+
+    /**
+     * Returns true if the submitted code matches the persisted code on the user node.
+     */
+    static boolean isCodeMatch(final String submittedCode, final String persistedCode) {
+        return submittedCode.equals(persistedCode);
+    }
+
+    /**
+     * Returns true if the link has expired (current time is strictly after timestamp + urlValidityMinutes).
+     */
+    static boolean isLinkExpired(final Calendar persistedTimestamp, final int urlValidityMinutes, final Instant now) {
+        final Calendar expiry = (Calendar) persistedTimestamp.clone();
+        expiry.add(Calendar.MINUTE, urlValidityMinutes);
+        return now.toEpochMilli() > expiry.getTimeInMillis();
+    }
+
+    /**
+     * Validates the reset code on the user node; throws if missing or mismatched.
+     */
+    static void validateCode(final String code, final String uid, final Node userNode)
+            throws RepositoryException, ResetPasswordException {
+        if (!userNode.hasProperty(PASSWORD_RESET_KEY)) {
+            throw new ResetPasswordException("No reset key property on node: " + uid);
+        }
+        final String persistedCode = userNode.getProperty(PASSWORD_RESET_KEY).getString();
+        if (!isCodeMatch(code, persistedCode)) {
+            throw new ResetPasswordException("Verification code mismatch for: " + uid);
+        }
+    }
+
+    /**
+     * Validates the reset timestamp on the user node; throws if missing or expired.
+     */
+    static void validateTimestamp(final String uid, final Node userNode, final int urlValidityMinutes)
+            throws RepositoryException, ResetPasswordException, ResetPasswordLinkExpiredException {
+        if (!userNode.hasProperty(PASSWORD_RESET_TIMESTAMP)) {
+            throw new ResetPasswordException("No reset timestamp property on node: " + uid);
+        }
+        final Calendar persistedTimestamp = userNode.getProperty(PASSWORD_RESET_TIMESTAMP).getDate();
+        if (isLinkExpired(persistedTimestamp, urlValidityMinutes, Instant.now())) {
+            throw new ResetPasswordLinkExpiredException("The link has expired");
+        }
     }
 
     protected class SetPasswordForm extends Form<Void> {
@@ -132,7 +174,6 @@ public class SetPasswordPanel extends Panel {
 
             feedback = new FeedbackPanel("feedback");
             feedback.setOutputMarkupId(true);
-            feedback.setEscapeModelStrings(false);
             add(feedback);
 
             loginLink = new WebMarkupContainer("loginLink");
@@ -154,8 +195,8 @@ public class SetPasswordPanel extends Panel {
 
             final boolean hasParameters = StringUtils.isNotEmpty(code) && StringUtils.isNotEmpty(uid);
             if (hasParameters) {
-                final boolean validParameters = validateForm(code, uid);
-                if (!validParameters) {
+                final boolean isValid = validateForm(code, uid);
+                if (!isValid) {
                     setPasswordFormTable.setVisible(false);
                     resetLink.setVisible(true);
                 }
@@ -187,12 +228,10 @@ public class SetPasswordPanel extends Panel {
             }
 
             try {
-                final PluginUserSession userSession = PluginUserSession.get();
-                final Session jcrSession = userSession.getJcrSession();
+                final Session jcrSession = PluginUserSession.get().getJcrSession();
 
                 validateUid(code, uid, jcrSession);
 
-                // validate password
                 final User user = new User(uid);
 
                 final List<PasswordValidationStatus> statuses =
@@ -215,30 +254,24 @@ public class SetPasswordPanel extends Panel {
             try {
                 final Session jcrSession = PluginUserSession.get().getJcrSession();
 
-                final User user = new User(uid);
-                user.savePassword(password);
-                info(labelMap.get(Configuration.PASSWORD_RESET_DONE));
-
-                setPasswordFormTable.setVisible(false);
-                loginLink.setVisible(true);
-
                 final Node userNode = jcrSession.getNode(HIPPO_USERS_PATH + uid);
-                if (userNode == null) {
-                    log.info("Unknown username: {}", uid);
-                    error(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
-                    return;
-                }
 
+                // Remove the reset token before saving the new password so a
+                // failed savePassword call cannot be retried with the same link.
                 if (userNode.hasProperty(PASSWORD_RESET_TIMESTAMP)) {
                     userNode.getProperty(PASSWORD_RESET_TIMESTAMP).remove();
                 }
-
                 if (userNode.hasProperty(PASSWORD_RESET_KEY)) {
                     userNode.getProperty(PASSWORD_RESET_KEY).remove();
                 }
-
-                // persist code and exp.date
                 jcrSession.save();
+
+                final User user = new User(uid);
+                user.savePassword(password);
+
+                info(labelMap.get(Configuration.PASSWORD_RESET_DONE));
+                setPasswordFormTable.setVisible(false);
+                loginLink.setVisible(true);
 
             } catch (final RepositoryException re) {
                 log.error("Error saving password SetPasswordForm", re);
@@ -246,71 +279,49 @@ public class SetPasswordPanel extends Panel {
             }
         }
 
+        /**
+         * Returns true if the code+uid parameters are valid (form should be shown).
+         * Returns false if invalid (form should be hidden, reset link shown).
+         */
         private boolean validateForm(final String code, final String uid) {
-
             try {
                 final Session jcrSession = PluginUserSession.get().getJcrSession();
-
-                if (validateUid(code, uid, jcrSession)) {
-                    return false;
-                }
+                return validateUid(code, uid, jcrSession);
             } catch (final RepositoryException e) {
                 log.error("Error validating SetPasswordForm", e);
                 error(labelMap.get(Configuration.SYSTEM_ERROR));
                 return false;
             }
-            return true;
         }
 
+        /**
+         * Returns true if the uid and code are valid; false if any check fails (errors added to form).
+         */
         private boolean validateUid(final String code, final String uid, final Session session) throws RepositoryException {
+            if (!UserIdValidator.isValid(uid)) {
+                error(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
+                return false;
+            }
             try {
                 final Node userNode = session.getNode(HIPPO_USERS_PATH + uid);
 
                 validateCode(code, uid, userNode);
-                validateTimestamp(uid, userNode);
+                validateTimestamp(uid, userNode, urlValidity);
+
+                return true;
 
             } catch (final PathNotFoundException pnfe) {
-                log.error("Unknown username: {}", uid, pnfe);
+                log.error("Unknown username during password reset", pnfe);
                 error(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
-                return true;
+                return false;
             } catch (final ResetPasswordException rpe) {
-                log.info("Error handling verification {}, {}", code, uid, rpe);
+                log.info("Invalid reset parameters: {}", rpe.getMessage());
                 error(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
-                return true;
+                return false;
             } catch (final ResetPasswordLinkExpiredException rpplee) {
-                log.info("Error handling verification {}, {}", code, uid, rpplee);
+                log.info("Expired reset link used");
                 error(labelMap.get(Configuration.RESET_LINK_EXPIRED));
-                return true;
-            }
-            return false;
-        }
-
-        private void validateTimestamp(final String uid, final Node userNode) throws RepositoryException, ResetPasswordException, ResetPasswordLinkExpiredException {
-            final Calendar currentTime = Calendar.getInstance();
-
-            final Calendar persistedTimestamp;
-            if (userNode.hasProperty(PASSWORD_RESET_TIMESTAMP)) {
-                persistedTimestamp = userNode.getProperty(PASSWORD_RESET_TIMESTAMP).getDate();
-            } else {
-                throw new ResetPasswordException(
-                        "No " + PASSWORD_RESET_TIMESTAMP + " property found on node: " + uid);
-            }
-            persistedTimestamp.add(Calendar.MINUTE, urlValidity);
-            if (currentTime.after(persistedTimestamp)) {
-                throw new ResetPasswordLinkExpiredException("The link has expired");
-            }
-        }
-
-        private void validateCode(final String code, final String uid, final Node userNode) throws RepositoryException, ResetPasswordException {
-            final String persistedCode;
-            if (userNode.hasProperty(PASSWORD_RESET_KEY)) {
-                persistedCode = userNode.getProperty(PASSWORD_RESET_KEY).getString();
-            } else {
-                throw new ResetPasswordException("No email present on node: " + uid);
-            }
-            if (!code.equals(persistedCode)) {
-                throw new ResetPasswordException(
-                        "Verification code passed in the url does not equal the persisted verification code");
+                return false;
             }
         }
 

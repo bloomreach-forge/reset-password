@@ -65,7 +65,7 @@
 
     <development-module-deploy-dir>shared/lib</development-module-deploy-dir>
 
-    <bloomreach.forge.reset-password.version>6.0.1-SNAPSHOT</bloomreach.forge.reset-password.version>
+    <bloomreach.forge.reset-password.version>7.0.1-SNAPSHOT</bloomreach.forge.reset-password.version>
 
     <docker.postgres.bind.1>${project.basedir}/target/postgres-data:/var/lib/postgresql/data</docker.postgres.bind.1>
 

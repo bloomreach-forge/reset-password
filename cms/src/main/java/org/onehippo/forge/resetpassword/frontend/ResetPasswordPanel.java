@@ -16,10 +16,13 @@
 package org.onehippo.forge.resetpassword.frontend;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
@@ -53,6 +56,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import static org.onehippo.forge.resetpassword.frontend.ResetPasswordConst.HIPPO_USERS_PATH;
 import static org.onehippo.forge.resetpassword.frontend.ResetPasswordConst.PASSWORD_RESET_KEY;
 import static org.onehippo.forge.resetpassword.frontend.ResetPasswordConst.PASSWORD_RESET_TIMESTAMP;
@@ -60,19 +64,18 @@ import static org.onehippo.forge.resetpassword.frontend.ResetPasswordConst.PASSW
 /**
  * ResetPasswordPanel
  * Panel on ResetPasswordFrame, showing only a field for entering the username
- * <p>
- * Based on SimpleLoginPlugin and LoginPlugin.
  */
 public class ResetPasswordPanel extends Panel {
 
     private static final Logger log = LoggerFactory.getLogger(ResetPasswordPanel.class);
 
     private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm";
-    private static final String SPACE = " ";
 
     private static final Pattern EMAIL_PARAM_NAME_PATTERN = Pattern.compile("\\$\\{name\\}");
     private static final Pattern EMAIL_PARAM_URL_PATTERN = Pattern.compile("\\$\\{url\\}");
     private static final Pattern EMAIL_PARAM_VALIDITY_PATTERN = Pattern.compile("\\$\\{validity\\}");
+
+    static final ResetPasswordRateLimiter RATE_LIMITER = new ResetPasswordRateLimiter(Duration.ofMinutes(1));
 
     /**
      * Constructor
@@ -84,6 +87,16 @@ public class ResetPasswordPanel extends Panel {
 
         add(ClassAttribute.append("login-panel-center"));
         add(new ResetPasswordForm(panelInfo.isAutoComplete(), panelInfo.getUserId(), panelInfo.getConfiguration()));
+    }
+
+    /**
+     * Builds a display name from optional first and last name parts.
+     * Returns only the non-blank parts joined by a space; empty string if both are blank.
+     */
+    static String buildUserDisplayName(final String firstName, final String lastName) {
+        return Stream.of(firstName, lastName)
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.joining(" "));
     }
 
     /**
@@ -129,7 +142,6 @@ public class ResetPasswordPanel extends Panel {
 
             feedback = new FeedbackPanel("feedback");
             feedback.setOutputMarkupId(true);
-            feedback.setEscapeModelStrings(false);
             add(feedback);
         }
 
@@ -139,6 +151,16 @@ public class ResetPasswordPanel extends Panel {
         @Override
         public final void onSubmit() {
 
+            if (!UserIdValidator.isValid(userId)) {
+                info(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
+                return;
+            }
+
+            if (!RATE_LIMITER.isAllowed(userId)) {
+                info(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
+                return;
+            }
+
             boolean resetSuccess = false;
             try {
                 final PluginUserSession userSession = PluginUserSession.get();
@@ -146,9 +168,10 @@ public class ResetPasswordPanel extends Panel {
 
                 if (resetPassword(jcrSession)) {
                     resetSuccess = true;
+                    RATE_LIMITER.recordAttempt(userId);
                 }
             } catch (final PathNotFoundException ignore) {
-                log.info("Unknown username: {}", userId);
+                log.info("Unknown username during reset request");
                 info(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
             } catch (final EmailException e) {
                 log.error("Sending mail failed.", e);
@@ -159,7 +182,6 @@ public class ResetPasswordPanel extends Panel {
             }
 
             if (resetSuccess) {
-                // show success stuff
                 resetPasswordFormTable.setVisible(false);
                 info(labelMap.get(Configuration.EMAIL_SENT));
             }
@@ -176,27 +198,25 @@ public class ResetPasswordPanel extends Panel {
 
         private boolean resetPassword(final Session session) throws RepositoryException, EmailException {
 
-            final Node userNode;
-            userNode = session.getNode(HIPPO_USERS_PATH + userId);
+            final Node userNode = session.getNode(HIPPO_USERS_PATH + userId);
 
-            // check if user is active
             boolean hippoUserActive = true;
             if (userNode.hasProperty("hipposys:active")) {
                 hippoUserActive = userNode.getProperty("hipposys:active").getBoolean();
             }
             if (!hippoUserActive) {
-                log.error("User is not active: {}", userId);
+                log.error("User is not active");
                 error(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
                 return false;
             }
-            
+
             String hippoUserEmail = null;
             if (userNode.hasProperty("hipposys:email")) {
                 hippoUserEmail = userNode.getProperty("hipposys:email").getString();
             }
 
             if (StringUtils.isEmpty(hippoUserEmail)) {
-                log.error("Unknown e-mail: {}", userId);
+                log.error("No e-mail configured for user");
                 error(labelMap.get(Configuration.INFORMATION_INCOMPLETE));
                 return false;
             }
@@ -210,18 +230,17 @@ public class ResetPasswordPanel extends Panel {
 
             final String mailText = getMailText(url, userName, expiryDate);
 
-            sendEmail(hippoUserEmail, userName, mailText);
-            log.debug("Sending mail link to user: {}", mailText);
-            // persist code and exp.date
-            // Node should be relaxed before adding extra properties
+            // Persist the token before sending the email so the link is always valid
+            // if delivered, even if a previous send attempt failed.
             if (userNode.canAddMixin("hippostd:relaxed")) {
                 userNode.addMixin("hippostd:relaxed");
             }
             final Calendar currentDate = (Calendar) dateNow.clone();
             userNode.setProperty(PASSWORD_RESET_TIMESTAMP, currentDate);
             userNode.setProperty(PASSWORD_RESET_KEY, code);
-
             session.save();
+
+            sendEmail(hippoUserEmail, userName, mailText);
 
             return true;
         }
@@ -233,7 +252,6 @@ public class ResetPasswordPanel extends Panel {
         }
 
         private String getMailText(final String url, final String username, final Calendar expireDate) {
-            // generate text
             String mailText = labelMap.get(Configuration.EMAIL_TEXT_RESET);
 
             mailText = EMAIL_PARAM_NAME_PATTERN.matcher(mailText).replaceAll(username);
@@ -265,15 +283,15 @@ public class ResetPasswordPanel extends Panel {
         }
 
         private String getUserName(final Node userNode) throws RepositoryException {
-            String hippoUserFirstName = null;
+            String firstName = null;
             if (userNode.hasProperty("hipposys:firstname")) {
-                hippoUserFirstName = userNode.getProperty("hipposys:firstname").getString();
+                firstName = userNode.getProperty("hipposys:firstname").getString();
             }
-            String hippoUserLastName = null;
+            String lastName = null;
             if (userNode.hasProperty("hipposys:lastname")) {
-                hippoUserLastName = userNode.getProperty("hipposys:lastname").getString();
+                lastName = userNode.getProperty("hipposys:lastname").getString();
             }
-            return hippoUserFirstName + SPACE + hippoUserLastName;
+            return buildUserDisplayName(firstName, lastName);
         }
 
         private void addLabelledComponent(final WebMarkupContainer container, final Component component) {
