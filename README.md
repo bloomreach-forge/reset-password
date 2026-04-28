@@ -32,43 +32,35 @@ and therefore ignored by Git.
      </dependency>
 ```
  
-add mail session JNDI resource to local context.xml, e.g.:
- 
-```
-    <Resource name="mail/Session" 
-      auth="Container" 
-      type="javax.mail.Session" 
-      mail.smtp.host="127.0.0.1"
-      mail.smtp.port= "2525"  
-      />
-```
+The demo `context.xml` is pre-configured to use `localhost:2525`. Start a local SMTP trap before running the demo:
 
-___
-Download  FakeSMTP from:
-
-[https://github.com/Nilhcem/FakeSMTP](https://github.com/Nilhcem/FakeSMTP)
-
-and run it as:
+**Mailpit** (recommended — web UI at `http://localhost:8025`):
 
 ```bash
-java -jar fakeSMTP-2.1-SNAPSHOT.jar -s  -p 2525 -a 127.0.0.1
+brew install mailpit
+mailpit --smtp 0.0.0.0:2525
 ```
-If you encounter issues on Mac, you can try to run it as:
+
+**Docker (no install):**
 
 ```bash
-java --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED -jar fakeSMTP-2.1-SNAPSHOT.jar -s -p 2525 -a 127.0.0.1
+docker run --rm -p 2525:25 -p 8025:8025 axllent/mailpit
 ```
 
-You may also need to update FakeSMTP to use Java 7 instead of Java 6.
-___
--> Go to CMS login page.
+If you need to point a different project at a local mail session, add this JNDI resource to its `context.xml`:
 
--> Click on Forgot password, it will take you to the Reset Password page.
+```xml
+<Resource name="mail/Session"
+  auth="Container"
+  type="jakarta.mail.Session"
+  mail.smtp.host="127.0.0.1"
+  mail.smtp.port="2525"/>
+```
 
--> Enter the username and click on Reset.
+---
 
--> An email will be sent to the Fake SMTP Server with a link to reset the password.
-
--> Click on the link, it will take you to the Reset Password page, enter the new password and click on Reset.
-
--> Go to the CMS Login page and test the new password.
+1. Go to the CMS login page and click **Forgot password**.
+2. Enter a username and click **Reset** — the email will be captured by Mailpit.
+3. Open `http://localhost:8025`, find the email, and click the reset link.
+4. Enter and confirm the new password, then click **Reset**.
+5. Return to the CMS login page and verify the new password works.
