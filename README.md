@@ -28,46 +28,47 @@ and therefore ignored by Git.
      <dependency>
         <groupId>org.bloomreach.forge.resetpassword</groupId>
         <artifactId>reset-password-essentials</artifactId>
-        <version>7.0.0</version>       
+        <version>8.0.0</version>       
      </dependency>
 ```
  
-add mail session JNDI resource to local context.xml, e.g.:
- 
-```
-    <Resource name="mail/Session" 
-      auth="Container" 
-      type="javax.mail.Session" 
-      mail.smtp.host="127.0.0.1"
-      mail.smtp.port= "2525"  
-      />
-```
+The demo project's `conf/context.xml` is pre-configured for [MailHog](https://github.com/mailhog/MailHog), a local SMTP server that captures outbound mail without delivering it.
 
-___
-Download  FakeSMTP from:
-
-[https://github.com/Nilhcem/FakeSMTP](https://github.com/Nilhcem/FakeSMTP)
-
-and run it as:
+Start MailHog via Docker:
 
 ```bash
-java -jar fakeSMTP-2.1-SNAPSHOT.jar -s  -p 2525 -a 127.0.0.1
+docker run -d -p 1025:1025 -p 8025:8025 --name mailhog mailhog/mailhog
 ```
-If you encounter issues on Mac, you can try to run it as:
+
+Or via Homebrew:
 
 ```bash
-java --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED -jar fakeSMTP-2.1-SNAPSHOT.jar -s -p 2525 -a 127.0.0.1
+brew install mailhog
+MailHog
 ```
 
-You may also need to update FakeSMTP to use Java 7 instead of Java 6.
-___
+The demo `conf/context.xml` is already configured to use it:
+
+```xml
+<Resource name="mail/Session"
+  auth="Container"
+  type="jakarta.mail.Session"
+  mail.smtp.host="localhost"
+  mail.smtp.port="1025"
+/>
+```
+
+Captured emails are viewable at [http://localhost:8025](http://localhost:8025).
+
+---
+
 -> Go to CMS login page.
 
 -> Click on Forgot password, it will take you to the Reset Password page.
 
 -> Enter the username and click on Reset.
 
--> An email will be sent to the Fake SMTP Server with a link to reset the password.
+-> An email will be sent to MailHog with a link to reset the password. Open [http://localhost:8025](http://localhost:8025) to view it.
 
 -> Click on the link, it will take you to the Reset Password page, enter the new password and click on Reset.
 

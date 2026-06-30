@@ -23,6 +23,6 @@
               auth="Container"
               type="jakarta.mail.Session"
               mail.smtp.host="localhost"
-              mail.smtp.port="2525"
+              mail.smtp.port="1025"
     />
 </Context>

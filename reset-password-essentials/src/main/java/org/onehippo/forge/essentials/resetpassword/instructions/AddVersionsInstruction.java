@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.BiConsumer;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.model.Model;
