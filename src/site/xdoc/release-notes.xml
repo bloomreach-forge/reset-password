@@ -30,6 +30,10 @@
           <th>Bloomreach Experience Manager Release version</th>
         </tr>
         <tr>
+          <td>8.x</td>
+          <td>17.x</td>
+        </tr>
+        <tr>
           <td>7.x</td>
           <td>16.x</td>
         </tr>
@@ -60,6 +64,14 @@
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="8.0.0">
+        <p class="smallinfo">Release Date: 30 June 2026</p>
+        <ul>
+          <li><a href="https://issues.onehippo.com/browse/FORGE-596">FORGE-596</a><br/>
+            Upgrade to Bloomreach Experience Manager 17.
+          </li>
+        </ul>
+      </subsection>
       <subsection name="7.0.0">
         <p class="smallinfo">Release Date: XX October 2024</p>
         <ul>
